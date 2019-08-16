@@ -64,3 +64,8 @@ typings/
 #custom
 .vscode
 test/build/
+
+
+#only dev branch
+dist/
+build/
