@@ -1,0 +1,10 @@
+stages:
+  - build
+
+build:
+  stage: build
+  tags: 
+   - group-runner
+  script:
+    - npm install
+    - npm run build

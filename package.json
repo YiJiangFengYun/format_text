@@ -1,0 +1,24 @@
+{
+  "name": "format_text",
+  "version": "0.0.0",
+  "description": "Text formatted",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build_development": "tsc --build tsconfig.json",
+    "build_production": "tsc --build tsconfig.dist.json",
+    "build": "npm run build_development & npm run build_production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.4399doc.com:queen_rises/format_text.git"
+  },
+  "author": "luoyujiang",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.5.3"
+  },
+  "files": [
+    "dist"
+  ]
+}
