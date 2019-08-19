@@ -129,6 +129,7 @@ export function removeBR(target: Data, index: number) {
 }
 
 function changeFormat(target: Data, src: Format, unset?: boolean) {
+    if (src.begin === src.end) return;
     let funDoFormat = unset ? decFormat : addFormat;
     let beginSlice: number = 0;
     let endSlice: number = 0;
@@ -147,105 +148,74 @@ function changeFormat(target: Data, src: Format, unset?: boolean) {
         }
     }
 
-    if (formats[beginSlice].begin === src.begin) {
-        if (formats[endSlice].end === src.end) {
-            //Add format to formats between begin format and end format include them.
-            for (let i = beginSlice; i <= endSlice; ++i) {
-                funDoFormat(formats[i], src)
+    if (beginSlice === endSlice) {
+        let originFormat = formats[beginSlice];
+        let firstBegin = originFormat.begin;
+        let firstEnd = src.begin;
+        let secondBegin = src.begin;
+        let secondEnd = src.end;
+        let thirdBegin = src.end;
+        let thirdEnd = originFormat.end;
+        let firstFormat: Format;
+        let thirdFormat: Format;
+        if (firstBegin !== firstEnd) {
+            firstFormat = cloneFormat(originFormat);
+            firstFormat.begin = firstBegin;
+            firstFormat.end = firstEnd;
+            formats.splice(beginSlice, 0, firstFormat);
+        }
+
+        let secondFormat = originFormat;
+        secondFormat.begin = secondBegin;
+        secondFormat.end = secondEnd;
+        
+        if (thirdBegin !== thirdEnd) {
+            thirdFormat = cloneFormat(originFormat);
+            thirdFormat.begin = thirdBegin;
+            thirdFormat.end = thirdEnd;
+            formats.splice(beginSlice + 2, 0, thirdFormat);
+        }
+
+        funDoFormat(secondFormat, src);
+
+    } else {
+        let begin = beginSlice + 1;
+        for (let i = begin; i < endSlice; ++i) {
+            funDoFormat(formats[i], src);
+        }
+
+        {
+            // Cut begin slice to two slice, and add the format to second slice, remain first slice the same.
+            let secondFormat = formats[beginSlice];
+            let secondBegin = src.begin;
+            let firstEnd = src.begin;
+            let firstBegin = secondFormat.begin;
+            secondFormat.begin = secondBegin;
+            if (firstBegin !== firstEnd) {
+                let firstFormat = cloneFormat(secondFormat);
+                firstFormat.begin = firstBegin;
+                firstFormat.end = firstEnd;
+                formats.splice(beginSlice, 0, firstFormat);
             }
-        } else {
-            //Add format to formats between begin format and end format exclude end.
-            for (let i = beginSlice; i < endSlice; ++i) {
-                funDoFormat(formats[i], src);
-            }
+            
+            funDoFormat(secondFormat, src);
+        }
+
+        {
             //Cut end slice to two slice, and add format to first slice, remain second slice the same.
             let firstFormat = formats[endSlice];
             let firstEnd = src.end;
             let secondBegin = src.end;
             let secondEnd = firstFormat.end;
             firstFormat.end = firstEnd;
-            let secondFormat =  cloneFormat(firstFormat);
-            secondFormat.begin = secondBegin;
-            secondFormat.end = secondEnd;
-            formats.splice(endSlice, 0, secondFormat);
-            funDoFormat(firstFormat, src);
-        }
-
-    } else if (formats[endSlice].end === src.end) {
-        //Add format to formats between begin format and end format exclude begin.
-        for (let i = beginSlice + 1; i <= endSlice; ++i) {
-            funDoFormat(formats[i], src);
-        }
-        // Cut begin slice to two slice, and add the format to second slice, remain first slice the same.
-        let secondFormat = formats[beginSlice];
-        let secondBegin = src.begin;
-        let firstEnd = src.begin;
-        let firstBegin = secondFormat.begin;
-        secondFormat.begin = secondBegin;
-        let firstFormat = cloneFormat(secondFormat);
-        firstFormat.begin = firstBegin;
-        firstFormat.end = firstEnd;
-        formats.splice(beginSlice, 0, firstFormat);
-        funDoFormat(secondFormat, src);
-    } else {
-        if (beginSlice === endSlice) {
-            //Separate the slice to three slices. and add the format to second slice.
-            let originFormat = formats[beginSlice];
-            let firstBegin = originFormat.begin;
-            let firstEnd = src.begin;
-            let secondBegin = src.begin;
-            let secondEnd = src.end;
-            let thirdBegin = src.end;
-            let thirdEnd = originFormat.end;
-            let firstFormat = cloneFormat(originFormat);
-            let secondFormat = cloneFormat(originFormat);
-            let thirdFormat = originFormat;
-
-            firstFormat.begin = firstBegin;
-            firstFormat.end = firstEnd;
-            secondFormat.begin = secondBegin;
-            secondFormat.end = secondEnd;
-            thirdFormat.begin = thirdBegin;
-            thirdFormat.end = thirdEnd;
-
-            formats.splice(beginSlice, 0, secondFormat);
-            formats.splice(beginSlice, 0, firstFormat);
-
-            funDoFormat(secondFormat, src);
-
-        } else {
-            let begin = beginSlice + 1;
-            for (let i = begin; i < endSlice; ++i) {
-                funDoFormat(formats[i], src);
-            }
-
-            {
-                // Cut begin slice to two slice, and add the format to second slice, remain first slice the same.
-                let secondFormat = formats[beginSlice];
-                let secondBegin = src.begin;
-                let firstEnd = src.begin;
-                let firstBegin = secondFormat.begin;
-                secondFormat.begin = secondBegin;
-                let firstFormat = cloneFormat(secondFormat);
-                firstFormat.begin = firstBegin;
-                firstFormat.end = firstEnd;
-                formats.splice(beginSlice, 0, firstFormat);
-                funDoFormat(secondFormat, src);
-            }
-
-            {
-                //Cut end slice to two slice, and add format to first slice, remain second slice the same.
-                let firstFormat = formats[endSlice];
-                let firstEnd = src.end;
-                let secondBegin = src.end;
-                let secondEnd = firstFormat.end;
-                firstFormat.end = firstEnd;
+            if (secondBegin !== secondEnd) {
                 let secondFormat =  cloneFormat(firstFormat);
                 secondFormat.begin = secondBegin;
                 secondFormat.end = secondEnd;
-                formats.splice(endSlice, 0, secondFormat);
-                funDoFormat(firstFormat, src);
+                formats.splice(endSlice + 1, 0, secondFormat);
             }
+            
+            funDoFormat(firstFormat, src);
         }
     }
 
