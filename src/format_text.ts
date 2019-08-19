@@ -80,7 +80,54 @@ export class FormatText {
     /**
      * Get rich text for cocos creator.
      */
-    public toCCRichText() {
+    public toCCRichText(begin: number, end: number) {
+        if (begin === end) return "";
+        let data = this.data;
+        let text = data.text;
+        let formats = data.formats;
+        let formatCount = formats.length;
+        let brs = data.brs;
+        let brCount = brs.length;
+        let brStart = 0;
 
+        let result: string = "";
+        for (let i = 0; i < formatCount; ++i) {
+            let format = formats[i];
+            if (format.end > begin || format.begin < end ) {
+                let subBegin = Math.max(begin, format.begin);
+                let subEnd = Math.min(end, format.end);
+                let subResult = "";
+                for (let j = brStart; j < brCount; ++j) {
+                    let index = brs[j];
+                    if (index < subEnd) {
+                        let temp = index - 1;
+                        subResult += text.substring(subBegin, temp);
+                        subResult += "<br/>"
+                        subBegin = temp;
+                    } else {
+                        brStart = j;
+                        break;
+                    }
+                }
+                subResult += text.substring(subBegin, subEnd);
+                if (format.types | modData.getFormatTypeBits(modData.FormatType.COLOR)) {
+                    subResult += `<color=#${format.color.toString(16)}>${subResult}</color>`;
+                }
+                if (format.types | modData.getFormatTypeBits(modData.FormatType.SIZE)) {
+                    subResult += `<size=${format.size}>${subResult}</size>`;
+                }
+                if (format.types | modData.getFormatTypeBits(modData.FormatType.BOLD)) {
+                    subResult += `<b>${subResult}</b>`;
+                }
+                if (format.types | modData.getFormatTypeBits(modData.FormatType.ITALIC)) {
+                    subResult += `<i>${subResult}</i>`;
+                }
+                result += subResult;
+            } else if (format.begin >= end) {
+                break;
+            }
+        }
+
+        return result;
     }
 }
