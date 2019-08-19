@@ -83,6 +83,34 @@ export function create(text?: string, size: number = 20, color: number = 0xfffff
     };
 }
 
+export function append(out: Data, src: Data) {
+    let offset = out.text.length;
+    out.text += src.text;
+    let len = src.formats.length;
+    let originLen = out.formats.length;
+    let newLen = originLen + len;
+    out.formats.length = newLen;
+    for (let i = 0; i < len; ++i) {
+        let index = i + originLen;
+        out.formats[index] = {} as any;
+        Object.assign(out.formats[index], src.formats[i]);
+        out.formats[index].begin += offset;
+        out.formats[index].end += offset;
+    }
+
+    len = src.brs.length;
+    originLen = out.brs.length;
+    newLen = originLen + len;
+    out.brs.length = newLen;
+    for (let i = 0; i < len; ++i) {
+        out.brs[originLen + i] = src.brs[i] + offset;
+    }
+
+    mergeSameContiguousFormats(out);
+
+    return out;
+}
+
 export function copy(out: Data, src: Data) {
     out.text = src.text;
     let len = out.formats.length = src.formats.length; 
@@ -230,6 +258,7 @@ function mergeSameContiguousFormats(target: Data) {
         let currFormat = formats[curr];
         let nextFormat = formats[curr + 1];
         if (isSameFormat(currFormat, nextFormat)) {
+            currFormat.end = nextFormat.end;
             formats.splice(curr + 1, 1);
         } else {
             ++curr;

@@ -15,6 +15,10 @@ export class FormatText {
         this.data = JSON.parse(dataStr);
     }
 
+    public append(data: modData.Data) {
+        modData.append(this.data, data);
+    }
+
     public setColor(begin: number, end: number, color: number) {
         modData.setFormat(this.data, {
             begin: begin,
