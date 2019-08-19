@@ -89,6 +89,7 @@ export function copy(out: Data, src: Data) {
         if (! out.formats[i]) out.formats[i] = {} as any;
         Object.assign(out.formats[i], src.formats[i]);
     }
+    out.brs = src.brs.slice();
 }
 
 export function clone(src: Data) {
