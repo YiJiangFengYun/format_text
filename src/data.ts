@@ -67,12 +67,13 @@ export interface Data {
 }
 
 export function create(text?: string, size: number = 20, color: number = 0xffffff): Data {
+    text = text || "";
     return {
-        text: "",
+        text: text,
         formats: [
             {
                 begin: 0,
-                end: -1,
+                end: text.length,
                 types: getFormatTypeBits(FormatType.COLOR) | getFormatTypeBits(FormatType.SIZE),
                 color: color,
                 size: size,

@@ -80,10 +80,12 @@ export class FormatText {
     /**
      * Get rich text for cocos creator.
      */
-    public toCCRichText(begin: number, end: number) {
-        if (begin === end) return "";
+    public toCCRichText(begin?: number, end?: number) {
         let data = this.data;
         let text = data.text;
+        if (begin === undefined) begin = 0;
+        if (end === undefined) end = text.length;
+        if (begin === end) return "";
         let formats = data.formats;
         let formatCount = formats.length;
         let brs = data.brs;
@@ -100,27 +102,27 @@ export class FormatText {
                 for (let j = brStart; j < brCount; ++j) {
                     let index = brs[j];
                     if (index < subEnd) {
-                        let temp = index - 1;
-                        subResult += text.substring(subBegin, temp);
+                        subResult += text.substring(subBegin, index);
                         subResult += "<br/>"
-                        subBegin = temp;
+                        subBegin = index;
+                        brStart = j + 1;
                     } else {
                         brStart = j;
                         break;
                     }
                 }
                 subResult += text.substring(subBegin, subEnd);
-                if (format.types | modData.getFormatTypeBits(modData.FormatType.COLOR)) {
-                    subResult += `<color=#${format.color.toString(16)}>${subResult}</color>`;
+                if (format.types & modData.getFormatTypeBits(modData.FormatType.COLOR)) {
+                    subResult = `<color=#${format.color.toString(16)}>${subResult}</color>`;
                 }
-                if (format.types | modData.getFormatTypeBits(modData.FormatType.SIZE)) {
-                    subResult += `<size=${format.size}>${subResult}</size>`;
+                if (format.types & modData.getFormatTypeBits(modData.FormatType.SIZE)) {
+                    subResult = `<size=${format.size}>${subResult}</size>`;
                 }
-                if (format.types | modData.getFormatTypeBits(modData.FormatType.BOLD)) {
-                    subResult += `<b>${subResult}</b>`;
+                if (format.types & modData.getFormatTypeBits(modData.FormatType.BOLD)) {
+                    subResult = `<b>${subResult}</b>`;
                 }
-                if (format.types | modData.getFormatTypeBits(modData.FormatType.ITALIC)) {
-                    subResult += `<i>${subResult}</i>`;
+                if (format.types & modData.getFormatTypeBits(modData.FormatType.ITALIC)) {
+                    subResult = `<i>${subResult}</i>`;
                 }
                 result += subResult;
             } else if (format.begin >= end) {
