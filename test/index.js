@@ -18,3 +18,9 @@ for (let i = 0; i <= len; ++i) {
     console.log(`${formatText.toCCRichText(0, i)}`);
 }
 
+console.log(`Link two text: `);
+
+formatText.append(formatData);
+
+console.log(`Format text to cc rich text: ${formatText.toCCRichText()}`);
+
