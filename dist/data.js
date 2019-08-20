@@ -148,10 +148,8 @@ function unsetFormat(target, src) {
 exports.unsetFormat = unsetFormat;
 function addBR(target, index) {
     var brs = target.brs;
-    if (brs.indexOf(index) < 0) {
-        brs.push(index);
-        brs.sort();
-    }
+    brs.push(index);
+    brs.sort();
 }
 exports.addBR = addBR;
 function removeBR(target, index) {
