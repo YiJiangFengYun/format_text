@@ -26,6 +26,25 @@ function getFormatTypeBits(type) {
     return 1 << type;
 }
 exports.getFormatTypeBits = getFormatTypeBits;
+function addFormatColor(origin, color) {
+    origin.types |= getFormatTypeBits(FormatType.COLOR);
+    origin.color = color;
+}
+exports.addFormatColor = addFormatColor;
+function addFormatSize(origin, size) {
+    origin.types |= getFormatTypeBits(FormatType.SIZE);
+    origin.size = size;
+}
+exports.addFormatSize = addFormatSize;
+function addFormats(origin, types) {
+    origin.types |= types;
+}
+exports.addFormats = addFormats;
+function decFormats(origin, types) {
+    var bitwise = (1 << FormatType.COUNT) - 1;
+    origin.types &= (~types & bitwise);
+}
+exports.decFormats = decFormats;
 function addFormat(origin, src) {
     origin.types |= src.types;
     if (src.types & getFormatTypeBits(FormatType.COLOR)) {
@@ -35,12 +54,10 @@ function addFormat(origin, src) {
         origin.size = src.size;
     }
 }
-exports.addFormat = addFormat;
 function decFormat(origin, src) {
     var bitwise = (1 << FormatType.COUNT) - 1;
     origin.types &= (~src.types & bitwise);
 }
-exports.decFormat = decFormat;
 function isSameFormat(format1, format2) {
     if (format1.types !== format2.types)
         return false;

@@ -15,8 +15,10 @@ export interface Format {
 export declare function copyFormat(out: Format, src: Format): void;
 export declare function cloneFormat(src: Format): Format;
 export declare function getFormatTypeBits(type: FormatType): number;
-export declare function addFormat(origin: Format, src: Format): void;
-export declare function decFormat(origin: Format, src: Format): void;
+export declare function addFormatColor(origin: Format, color: number): void;
+export declare function addFormatSize(origin: Format, size: number): void;
+export declare function addFormats(origin: Format, types: number): void;
+export declare function decFormats(origin: Format, types: FormatType): void;
 export declare function isSameFormat(format1: Format, format2: Format): boolean;
 export interface Data {
     text: string;
