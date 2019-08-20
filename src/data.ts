@@ -32,7 +32,26 @@ export function getFormatTypeBits(type: FormatType) {
     return 1 << type;
 }
 
-export function addFormat(origin: Format, src: Format) {
+export function addFormatColor(origin: Format, color: number) {
+    origin.types |= getFormatTypeBits(FormatType.COLOR);
+    origin.color = color;
+}
+
+export function addFormatSize(origin: Format, size: number) {
+    origin.types |= getFormatTypeBits(FormatType.SIZE);
+    origin.size = size;
+}
+
+export function addFormats(origin: Format, types: number) {
+    origin.types |= types;
+}
+
+export function decFormats(origin: Format, types: FormatType) {
+    let bitwise = (1 << FormatType.COUNT) - 1;
+    origin.types &= (~types & bitwise);
+}
+
+function addFormat(origin: Format, src: Format) {
     origin.types |= src.types;
     if (src.types & getFormatTypeBits(FormatType.COLOR)) {
         origin.color = src.color;
@@ -43,7 +62,7 @@ export function addFormat(origin: Format, src: Format) {
     }
 }
 
-export function decFormat(origin: Format, src: Format) {
+function decFormat(origin: Format, src: Format) {
     let bitwise = (1 << FormatType.COUNT) - 1;
     origin.types &= (~src.types & bitwise);
 }
