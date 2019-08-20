@@ -162,10 +162,8 @@ export function unsetFormat(target: Data, src: Format) {
 
 export function addBR(target: Data, index: number) {
     let brs = target.brs;
-    if (brs.indexOf(index) < 0) {
-        brs.push(index);
-        brs.sort();
-    }
+    brs.push(index);
+    brs.sort();
 }
 
 export function removeBR(target: Data, index: number) {
