@@ -149,7 +149,9 @@ exports.unsetFormat = unsetFormat;
 function addBR(target, index) {
     var brs = target.brs;
     brs.push(index);
-    brs.sort();
+    brs.sort(function (a, b) {
+        return a - b;
+    });
 }
 exports.addBR = addBR;
 function removeBR(target, index) {
