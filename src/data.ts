@@ -163,7 +163,9 @@ export function unsetFormat(target: Data, src: Format) {
 export function addBR(target: Data, index: number) {
     let brs = target.brs;
     brs.push(index);
-    brs.sort();
+    brs.sort((a, b) => {
+        return a - b;
+    });
 }
 
 export function removeBR(target: Data, index: number) {
