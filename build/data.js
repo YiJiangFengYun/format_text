@@ -181,7 +181,7 @@ function getFormats(target, begin, end) {
     }
     var reses = [];
     var len = endSlice - beginSlice + 1;
-    formats.length = len;
+    reses.length = len;
     for (var i = 0; i < len; ++i) {
         reses[i] = formats[beginSlice + i];
     }
