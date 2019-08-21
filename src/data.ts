@@ -244,6 +244,8 @@ function changeFormat(target: Data, src: Format, unset?: boolean) {
                 firstFormat.begin = firstBegin;
                 firstFormat.end = firstEnd;
                 formats.splice(beginSlice, 0, firstFormat);
+                ++beginSlice;
+                ++endSlice;
             }
             
             funDoFormat(secondFormat, src);
