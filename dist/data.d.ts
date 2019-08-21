@@ -33,3 +33,4 @@ export declare function setFormat(target: Data, src: Format): void;
 export declare function unsetFormat(target: Data, src: Format): void;
 export declare function addBR(target: Data, index: number): void;
 export declare function removeBR(target: Data, index: number): void;
+export declare function getFormats(target: Data, begin: number, end: number): Format[];

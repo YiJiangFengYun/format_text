@@ -13,6 +13,7 @@ export declare class FormatText {
     unsetItalic(begin: number, end: number): void;
     addBR(index: number): void;
     removeBR(index: number): void;
+    getFormats(begin: number, end: number): modData.Format[];
     toString(): string;
     /**
      * Get rich text for cocos creator.

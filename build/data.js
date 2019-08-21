@@ -162,6 +162,32 @@ function removeBR(target, index) {
     }
 }
 exports.removeBR = removeBR;
+function getFormats(target, begin, end) {
+    var beginSlice = 0;
+    var endSlice = 0;
+    var formats = target.formats;
+    var formatCount = formats.length;
+    for (var i = 0; i < formatCount; ++i) {
+        if (begin < formats[i].end) {
+            beginSlice = i;
+            break;
+        }
+    }
+    for (var i = formatCount - 1; i >= 0; --i) {
+        if (end > formats[i].begin) {
+            endSlice = i;
+            break;
+        }
+    }
+    var reses = [];
+    var len = endSlice - beginSlice + 1;
+    formats.length = len;
+    for (var i = 0; i < len; ++i) {
+        reses[i] = formats[beginSlice + i];
+    }
+    return reses;
+}
+exports.getFormats = getFormats;
 function changeFormat(target, src, unset) {
     if (src.begin === src.end)
         return;

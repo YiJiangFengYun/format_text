@@ -64,6 +64,9 @@ var FormatText = /** @class */ (function () {
     FormatText.prototype.removeBR = function (index) {
         modData.removeBR(this.data, index);
     };
+    FormatText.prototype.getFormats = function (begin, end) {
+        return modData.getFormats(this.data, begin, end);
+    };
     FormatText.prototype.toString = function () {
         return this.data.text;
     };
