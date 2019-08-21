@@ -77,6 +77,10 @@ export class FormatText {
         modData.removeBR(this.data, index);
     }
 
+    public getFormats(begin: number, end: number) {
+        return modData.getFormats(this.data, begin, end);
+    }
+
     public toString() {
         return this.data.text;
     }

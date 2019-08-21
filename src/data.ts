@@ -176,6 +176,33 @@ export function removeBR(target: Data, index: number) {
     }
 }
 
+export function getFormats(target: Data, begin: number, end: number): Format[] {
+    let beginSlice: number = 0;
+    let endSlice: number = 0;
+    let formats = target.formats;
+    let formatCount = formats.length;
+    for (let i = 0; i < formatCount; ++i) {
+        if (begin < formats[i].end) {
+            beginSlice = i;
+            break;
+        }
+    }
+    for (let i = formatCount - 1; i >= 0; --i) {
+        if (end > formats[i].begin) {
+            endSlice = i;
+            break;
+        }
+    }
+
+    let reses: Format[] = [];
+    let len = endSlice - beginSlice + 1;
+    formats.length = len;
+    for (let i = 0; i < len; ++i) {
+        reses[i] = formats[beginSlice + i];
+    }
+    return reses;
+}
+
 function changeFormat(target: Data, src: Format, unset?: boolean) {
     if (src.begin === src.end) return;
     let funDoFormat = unset ? decFormat : addFormat;
