@@ -113,7 +113,7 @@ function append(out, src) {
     for (var i = 0; i < len; ++i) {
         out.brs[originLen + i] = src.brs[i] + offset;
     }
-    mergeSameContiguousFormats(out);
+    mergeFormats(out);
     return out;
 }
 exports.append = append;
@@ -273,9 +273,9 @@ function changeFormat(target, src, unset) {
             funDoFormat(firstFormat, src);
         }
     }
-    mergeSameContiguousFormats(target);
+    mergeFormats(target);
 }
-function mergeSameContiguousFormats(target) {
+function mergeFormats(target) {
     var curr = 0;
     var formats = target.formats;
     while (curr < formats.length - 1) {
@@ -284,6 +284,17 @@ function mergeSameContiguousFormats(target) {
         if (isSameFormat(currFormat, nextFormat)) {
             currFormat.end = nextFormat.end;
             formats.splice(curr + 1, 1);
+        }
+        else {
+            ++curr;
+        }
+    }
+    curr = 0;
+    //Delete empty format.
+    while (curr < formats.length) {
+        var currFormat = formats[curr];
+        if (currFormat.begin == currFormat.end) {
+            formats.splice(curr, 1);
         }
         else {
             ++curr;
