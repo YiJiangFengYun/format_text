@@ -1,14 +1,18 @@
 import * as modData from "./data";
 
 export class FormatText {
-    public data: modData.Data = modData.create("");
+    public data: modData.Data = modData.create();
 
     public constructor() {
 
     }
 
-    public init(data: modData.Data) {
-        modData.copy(this.data, data);
+    public init(data?: modData.Data) {
+        if (data) {
+            modData.copy(this.data, data);
+        } else {
+            this.data = modData.create();
+        }
     }
 
     public initFromJsonStr(dataStr: string) {
