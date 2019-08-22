@@ -2,7 +2,7 @@ import * as modData from "./data";
 export declare class FormatText {
     data: modData.Data;
     constructor();
-    init(data: modData.Data): void;
+    init(data?: modData.Data): void;
     initFromJsonStr(dataStr: string): void;
     append(data: modData.Data): void;
     setColor(begin: number, end: number, color: number): void;

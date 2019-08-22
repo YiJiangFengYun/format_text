@@ -3,10 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var modData = require("./data");
 var FormatText = /** @class */ (function () {
     function FormatText() {
-        this.data = modData.create("");
+        this.data = modData.create();
     }
     FormatText.prototype.init = function (data) {
-        modData.copy(this.data, data);
+        if (data) {
+            modData.copy(this.data, data);
+        }
+        else {
+            this.data = modData.create();
+        }
     };
     FormatText.prototype.initFromJsonStr = function (dataStr) {
         this.data = JSON.parse(dataStr);
